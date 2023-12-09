@@ -27,7 +27,7 @@ public class AssemblyResourceStreamMigrationProvider : IMigrationScriptProvider 
     /// </summary>
     /// <returns>A sequence of migration scripts.</returns>
     public Task<IEnumerable<(string, Stream)>> LoadMigrationScripts() {
-        var migrationFileNameRegex = new Regex(@"[VR]\d+\.\d+\.\d+(?:\.\d+)?(?:-[^_]+)?__\w*(?=\.sql)");
+        var migrationFileNameRegex = new Regex(@"[VR]\d+\.\d+\.\d+(?:\.\d+)?(?:-[^_]+)?__[^\.]*\.sql");
         return Task.FromResult(
             from manifestResourceName in _assembly.GetManifestResourceNames()
             where migrationFileNameRegex.IsMatch(manifestResourceName)
