@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peregrinus", "Peregrinus\Peregrinus.csproj", "{8504E0B2-0744-4BF4-A1FB-A370FBA9EADA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peregrinus.Tests", "Peregrinus.Tests\Peregrinus.Tests.csproj", "{7FFB2145-4923-41D3-B6FE-80FB7025AF96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B78FC2B-D303-4D5F-813B-A95EBB29B5B2}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8504E0B2-0744-4BF4-A1FB-A370FBA9EADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8504E0B2-0744-4BF4-A1FB-A370FBA9EADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8504E0B2-0744-4BF4-A1FB-A370FBA9EADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8504E0B2-0744-4BF4-A1FB-A370FBA9EADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FFB2145-4923-41D3-B6FE-80FB7025AF96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FFB2145-4923-41D3-B6FE-80FB7025AF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FFB2145-4923-41D3-B6FE-80FB7025AF96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FFB2145-4923-41D3-B6FE-80FB7025AF96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B7679E8B-FBC9-43C0-9675-57E0259B7F70}
+	EndGlobalSection
+EndGlobal
