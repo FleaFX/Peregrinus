@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Authors>Sterima NV</Authors>
-    <Company>Sterima NV</Company>
-    <Product>Migrations</Product>
-    <PackageId>Sterima.Migrations</PackageId>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Authors)</Company>
+    <Product>$(AssemblyName)</Product>
+    <PackageId>$(AssemblyName)</PackageId>
     <AssemblyName>Peregrinus</AssemblyName>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
