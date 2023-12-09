@@ -17,7 +17,7 @@ public class ApplicableMigration : Migration {
     protected readonly MigrationScriptContent _content;
 
     static readonly Regex VersionFormat = new Regex(@"(?<VersionInfo>(?<Major>[0-9]{1,})\.(?<Minor>[0-9]{1,})\.(?<Patch>[0-9]{1,})(?:-(?<Pre>(?:[0-9a-zA-Z-]\.{0,1})*){0,1}){0,1}(?:\+(?<meta>(?:[0-9a-zA-Z-]\.{0,1})*)){0,1})");
-    static readonly Regex DescriptionFormat = new Regex(@"__(?<Description>\w{1,}?)\.\w+$");
+    static readonly Regex DescriptionFormat = new Regex(@"__(?<Description>[^\.]*?)\.\w+$");
 
     /// <summary>
     /// Initializes a new <see cref="ApplicableMigration"/>.
