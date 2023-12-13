@@ -62,6 +62,25 @@ public class Migrator {
         });
     }
 
+    /// <summary>
+    /// Rolls back the database using the given <paramref name="rollbackStrategy"/>.
+    /// </summary>
+    /// <param name="rollbackStrategy">The <see cref="RollbackStrategy"/> that governs the rollback behaviour.</param>
+    /// <returns>An awaitable <see cref="Task"/>.</returns>
+    public async Task Rollback(RollbackStrategy rollbackStrategy) {
+        // 1. provision the database, schemas and history table
+        CreateProvisioningContext(_targetDatabase).Provision();
+
+        // 2. collect all migration files
+        var batch = await ReadMigrations(MigrationsBatch.Empty);
+
+        // 3. load existing history
+        var migrationHistory = await CreateMigrationContext(_targetDatabase).LoadHistory(batch);
+
+        // 4. perform the rollback
+        await rollbackStrategy.Rollback(migrationHistory);
+    }
+
     MigrationContext CreateProvisioningContext(string targetDatabase) {
         var migrationDatabase = new MigrationTargetDatabase(_connectionString);
         var master = migrationDatabase.Target("master");
