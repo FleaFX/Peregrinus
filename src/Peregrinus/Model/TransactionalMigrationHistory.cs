@@ -63,7 +63,7 @@ public class TransactionalMigrationHistory : IMigrationHistory {
     public async Task<MigrationRollbackResult> Rollback(Predicate<AppliedMigration> shouldRollback = null) {
         using var transaction = new TransactionScope(TransactionScopeOption.Required);
         // delegate to inner
-        var result = await _innerMigrationHistory.Rollback(shouldRollback);
+        var result = await _innerMigrationHistory.Rollback(shouldRollback).ConfigureAwait(true);
 
         // always complete. Rolling back either happens or not. There's no harm in committing anyway in case of the latter.
         transaction.Complete();
