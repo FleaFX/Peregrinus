@@ -61,9 +61,9 @@ public class TransactionalMigrationHistory : IMigrationHistory {
     /// <param name="shouldRollback">An optional <see cref="Predicate{T}"/> condition gives the opportunity to inspect the rollback candidate in order to stop the rollback if need be.</param>
     /// <returns>A <see cref="MigrationRollbackResult"/>.</returns>
     public async Task<MigrationRollbackResult> Rollback(Predicate<AppliedMigration> shouldRollback = null) {
-        using var transaction = new TransactionScope(TransactionScopeOption.Required);
+        using var transaction = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
         // delegate to inner
-        var result = await _innerMigrationHistory.Rollback(shouldRollback).ConfigureAwait(true);
+        var result = await _innerMigrationHistory.Rollback(shouldRollback);
 
         // always complete. Rolling back either happens or not. There's no harm in committing anyway in case of the latter.
         transaction.Complete();
@@ -81,9 +81,9 @@ public class TransactionalMigrationHistory : IMigrationHistory {
     /// <param name="strategy">The <see cref="RollbackStrategy"/> to use.</param>
     /// <returns>A <see cref="MigrationRollbackResult"/>.</returns>
     public async Task<MigrationRollbackResult> Rollback(RollbackStrategy strategy) {
-        using var transaction = new TransactionScope(TransactionScopeOption.Required);
+        using var transaction = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
         // delegate to inner
-        var result = await _innerMigrationHistory.Rollback(strategy).ConfigureAwait(true);
+        var result = await _innerMigrationHistory.Rollback(strategy);
 
         // complete transaction. Failure situations should have thrown an exception, causing us to not reach this point
         transaction.Complete();
