@@ -83,7 +83,7 @@ public class TransactionalMigrationHistory : IMigrationHistory {
     public async Task<MigrationRollbackResult> Rollback(RollbackStrategy strategy) {
         using var transaction = new TransactionScope(TransactionScopeOption.Required);
         // delegate to inner
-        var result = await _innerMigrationHistory.Rollback(strategy);
+        var result = await _innerMigrationHistory.Rollback(strategy).ConfigureAwait(true);
 
         // complete transaction. Failure situations should have thrown an exception, causing us to not reach this point
         transaction.Complete();
