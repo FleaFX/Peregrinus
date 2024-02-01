@@ -34,7 +34,7 @@ public class Migrator {
     /// <returns>An awaitable <see cref="Task"/>.</returns>
     public async Task Migrate() {
         // 1. provision the database, schemas and history table
-        CreateProvisioningContext(_targetDatabase).Provision();
+        Provision();
 
         // 2. collect all migration files
         var batch = await ReadMigrations(MigrationsBatch.Empty);
@@ -69,7 +69,7 @@ public class Migrator {
     /// <returns>An awaitable <see cref="Task"/>.</returns>
     public async Task Rollback(RollbackStrategy rollbackStrategy) {
         // 1. provision the database, schemas and history table
-        CreateProvisioningContext(_targetDatabase).Provision();
+        Provision();
 
         // 2. collect all migration files
         var batch = await ReadMigrations(MigrationsBatch.Empty);
@@ -81,10 +81,15 @@ public class Migrator {
         await rollbackStrategy.Rollback(migrationHistory);
     }
 
-    MigrationContext CreateProvisioningContext(string targetDatabase) {
+    void Provision() {
         var migrationDatabase = new MigrationTargetDatabase(_connectionString);
-        var master = migrationDatabase.Target("master");
-        return new MigrationContext(new QueryExecutor(master), new MigrationExecutor(migrationDatabase), targetDatabase, "migration_history", _managedSchemas);
+        var master = new QueryExecutor(migrationDatabase.Target("master"));
+        master.ProvisionDatabase(_targetDatabase);
+
+        // use new connection because Azure sql does not support switching databases on the same connection
+        var target = new QueryExecutor(migrationDatabase.Target(_targetDatabase));
+        target.ProvisionManagedSchemas(_targetDatabase, _managedSchemas);
+        target.ProvisionHistoryTable(_targetDatabase, _managedSchemas, "migration_history");
     }
 
     MigrationContext CreateMigrationContext(string targetDatabase) {
