@@ -33,53 +33,6 @@ public class MigrationContext : IMigrationContext {
         _managedSchemas = managedSchemas ?? new [] { "dbo" };
     }
 
-    void ProvisionDatabase() {
-        var provisionDatabase = $@"
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE [name] = '{_targetDatabaseName}')
-BEGIN
-	CREATE DATABASE [{_targetDatabaseName}];
-END";
-        _queryExecutor.NewQuery(provisionDatabase).Execute();
-    }
-
-    void ProvisionManagedSchemas() {
-        foreach (var schema in _managedSchemas) {
-            var provisionSchema = $@"
-IF NOT EXISTS (SELECT * FROM [{_targetDatabaseName}].sys.schemas WHERE [name] = '{schema}')
-BEGIN
-	DECLARE @sql NVARCHAR(MAX)
-	SET @sql = 'CREATE SCHEMA [{schema}];'
-	EXEC [{_targetDatabaseName}].dbo.sp_executesql @sql
-END";
-            _queryExecutor.NewQuery(provisionSchema).Execute();
-        }
-    }
-
-    void ProvisionHistoryTable() {
-        var provisionHistoryTable = $@"
-IF NOT EXISTS (SELECT * FROM [{_targetDatabaseName}].sys.tables WHERE [name] = '{_migrationHistoryTableName}')
-BEGIN
-  CREATE TABLE [{_targetDatabaseName}].[{_managedSchemas?.FirstOrDefault() ?? "dbo"}].[{_migrationHistoryTableName}] (
-    [Id] uniqueidentifier ROWGUIDCOL NOT NULL PRIMARY KEY CLUSTERED CONSTRAINT DF_{_migrationHistoryTableName.ToUpper()}_ID DEFAULT (NEWID()),
-    [TimeStamp] bigint NOT NULL,
-    [Version] nvarchar(50) NOT NULL,
-    [Description] nvarchar(255) NOT NULL,
-    [Checksum] binary(20) NOT NULL,
-    [ExecutionTime] bigint NULL
-  );
-END";
-        _queryExecutor.NewQuery(provisionHistoryTable).Execute();
-    }
-
-    /// <summary>
-    /// Provisions the database, managed schemas and the migration history table, if necessary.
-    /// </summary>
-    public void Provision() {
-        ProvisionDatabase();
-        ProvisionManagedSchemas();
-        ProvisionHistoryTable();
-    }
-
     /// <summary>
     /// Loads the current <see cref="MigrationHistory"/> from the history table in the target database.
     /// </summary>
