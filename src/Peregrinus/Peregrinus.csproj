@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Authors>$(Authors)</Authors>
     <Company>$(Authors)</Company>
     <Product>$(AssemblyName)</Product>
     <PackageId>$(AssemblyName)</PackageId>
     <AssemblyName>Peregrinus</AssemblyName>
-    <Version>0.11.0</Version>
+    <Version>0.12.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
