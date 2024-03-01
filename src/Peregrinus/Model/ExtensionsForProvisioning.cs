@@ -13,6 +13,22 @@ END";
         queryExecutor.NewQuery(provisionDatabase).Execute();
     }
 
+    public static void ProvisionLogins(this IQueryExecutor queryExecutor, LoginInfo[] logins) {
+        foreach (var loginInfo in logins) {
+            var provisionLoginSql =
+                $"""
+                IF NOT EXISTS (SELECT [name] FROM sys.server_principals WHERE [name] = @UserName)
+                BEGIN
+                    CREATE LOGIN [{loginInfo.Name}] WITH PASSWORD=N'{loginInfo.Password}'
+                    , DEFAULT_DATABASE=[master]
+                    , CHECK_EXPIRATION=OFF
+                    , CHECK_POLICY=OFF
+                END
+                """;
+            queryExecutor.NewQuery(provisionLoginSql).Execute();
+        }
+    }
+
     public static void ProvisionManagedSchemas(this IQueryExecutor queryExecutor, string targetDatabaseName, string[] managedSchemas) {
         foreach (var schema in managedSchemas) {
             var provisionSchema = $@"
