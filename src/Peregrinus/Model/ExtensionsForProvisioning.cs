@@ -15,7 +15,7 @@ END";
 
     public static void ProvisionLogins(this IQueryExecutor queryExecutor, LoginInfo[] logins) {
         foreach (var loginInfo in logins) {
-            var provisionUser =
+            var provisionLoginSql =
                 $"""
                 IF NOT EXISTS (SELECT [name] FROM sys.server_principals WHERE [name] = @UserName)
                 BEGIN
@@ -25,7 +25,7 @@ END";
                     , CHECK_POLICY=OFF
                 END
                 """;
-            queryExecutor.NewQuery(provisionUser).Execute();
+            queryExecutor.NewQuery(provisionLoginSql).Execute();
         }
     }
 
