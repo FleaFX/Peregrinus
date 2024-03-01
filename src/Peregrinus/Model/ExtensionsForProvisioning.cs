@@ -17,7 +17,7 @@ END";
         foreach (var loginInfo in logins) {
             var provisionLoginSql =
                 $"""
-                IF NOT EXISTS (SELECT [name] FROM sys.server_principals WHERE [name] = @UserName)
+                IF NOT EXISTS (SELECT [name] FROM sys.server_principals WHERE [name] = @Name)
                 BEGIN
                     CREATE LOGIN [{loginInfo.Name}] WITH PASSWORD=N'{loginInfo.Password}'
                     , DEFAULT_DATABASE=[master]
@@ -25,7 +25,7 @@ END";
                     , CHECK_POLICY=OFF
                 END
                 """;
-            queryExecutor.NewQuery(provisionLoginSql).Execute();
+            queryExecutor.NewQuery(provisionLoginSql).WithParameters(new { Name = loginInfo.Name }).Execute();
         }
     }
 
