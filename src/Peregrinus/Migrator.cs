@@ -12,6 +12,7 @@ public class Migrator {
     readonly string _connectionString;
     readonly string _targetDatabase;
     readonly IMigrationScriptProvider _migrationScriptProvider;
+    readonly LoginInfo[] _managedLogins;
     readonly string[] _managedSchemas;
 
     /// <summary>
@@ -20,11 +21,13 @@ public class Migrator {
     /// <param name="connectionString">The connection string to the database server where the migrations should run.</param>
     /// <param name="targetDatabase">The name of the target database to migrate.</param>
     /// <param name="migrationScriptProvider">A <see cref="IMigrationScriptProvider"/> that provides the list of migrations to run.</param>
+    /// <param name="managedLogins">A sequence of logins that is maintained by the migrator.</param>
     /// <param name="managedSchemas">A sequence of schemas that is maintained by the migrator.</param>
-    public Migrator(string connectionString, string targetDatabase, IMigrationScriptProvider migrationScriptProvider, params string[] managedSchemas) {
+    public Migrator(string connectionString, string targetDatabase, IMigrationScriptProvider migrationScriptProvider, LoginInfo[] managedLogins = null, params string[] managedSchemas) {
         _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         _targetDatabase = targetDatabase ?? throw new ArgumentNullException(nameof(targetDatabase));
         _migrationScriptProvider = migrationScriptProvider ?? throw new ArgumentNullException(nameof(migrationScriptProvider));
+        _managedLogins = managedLogins ?? Array.Empty<LoginInfo>();
         _managedSchemas = managedSchemas.DefaultIfEmpty("meta").ToArray();
     }
 
@@ -85,6 +88,7 @@ public class Migrator {
         var migrationDatabase = new MigrationTargetDatabase(_connectionString);
         var master = new QueryExecutor(migrationDatabase.Target("master"));
         master.ProvisionDatabase(_targetDatabase);
+        master.ProvisionLogins(_managedLogins);
 
         // use new connection because Azure sql does not support switching databases on the same connection
         var target = new QueryExecutor(migrationDatabase.Target(_targetDatabase));
