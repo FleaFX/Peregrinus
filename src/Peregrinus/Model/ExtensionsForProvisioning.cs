@@ -20,7 +20,6 @@ END";
                 IF NOT EXISTS (SELECT [name] FROM sys.server_principals WHERE [name] = @Name)
                 BEGIN
                     CREATE LOGIN [{loginInfo.Name}] WITH PASSWORD=N'{loginInfo.Password}'
-                    , DEFAULT_DATABASE=[master]
                     , CHECK_EXPIRATION=OFF
                     , CHECK_POLICY=OFF
                 END
