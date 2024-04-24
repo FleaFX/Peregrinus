@@ -39,22 +39,20 @@ public abstract class Migration {
         /// <summary>
         /// <see cref="Comparison{Migration}"/> that compares two migrations by their <see cref="Version"/>.
         /// </summary>
-        public static readonly Comparison<Migration> ByVersion = (left, right) => left._version.CompareTo(right._version);
+        public static readonly Comparison<Migration> ByVersion = (left, right) => left._version.CompareSortOrderTo(right._version);
     }
 
-    bool Equals(Migration other) {
-        return Equals(_version, other._version) && _description.Equals(other._description) && _checksum.Equals(other._checksum);
-    }
+    bool Equals(Migration other) =>
+        _version.Equals(other._version) && _description.Equals(other._description) && _checksum.Equals(other._checksum);
 
     /// <summary>Determines whether the specified object is equal to the current object.</summary>
     /// <param name="obj">The object to compare with the current object. </param>
     /// <returns>
     /// <see langword="true" /> if the specified object  is equal to the current object; otherwise, <see langword="false" />.</returns>
     public override bool Equals(object obj) {
-        if (ReferenceEquals(null, obj)) return false;
+        if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (!(obj is Migration)) return false;
-        return Equals((Migration) obj);
+        return obj is Migration migration && Equals(migration);
     }
 
     /// <summary>Serves as the default hash function. </summary>
