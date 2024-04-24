@@ -27,11 +27,8 @@ public readonly struct MigrationScriptContent {
     /// Calculates the <see cref="Checksum"/> of the given <see cref="MigrationScriptContent"/>.
     /// </summary>
     /// <param name="instance">The <see cref="MigrationScriptContent"/> to calculate the <see cref="Checksum"/> of.</param>
-    public static explicit operator Checksum(MigrationScriptContent instance) {
-        using var sha1 = SHA1.Create();
-        var buffer = Encoding.UTF8.GetBytes(instance._value.ReplaceLineEndings(string.Empty).Trim());
-        return new Checksum(sha1.ComputeHash(buffer));
-    }
+    public static explicit operator Checksum(MigrationScriptContent instance) =>
+        new(SHA1.HashData(Encoding.UTF8.GetBytes(instance._value.ReplaceLineEndings(string.Empty).Trim())));
 
     /// <summary>
     /// Creates a <see cref="MigrationScriptContent"/> by reading the given <see cref="FileInfoBase"/>.

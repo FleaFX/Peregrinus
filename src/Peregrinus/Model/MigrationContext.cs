@@ -43,11 +43,11 @@ public class MigrationContext : IMigrationContext {
         var loadSql = $@"
 SELECT
   [Id]
-, [TimeStamp]
+, [TimeStamp] AS [TimeStampTicks]
 , [Version]
 , [Description]
 , [Checksum]
-, [ExecutionTime]
+, [ExecutionTime] AS [ExecutionTimeTicks]
 FROM [{_targetDatabaseName}].[{_managedSchemas?.FirstOrDefault() ?? "dbo"}].[{_migrationHistoryTableName}]
 ORDER BY [TimeStamp] ASC";
         var appliedMigrations = await (
