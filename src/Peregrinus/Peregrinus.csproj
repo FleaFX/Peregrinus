@@ -7,15 +7,15 @@
     <Product>$(AssemblyName)</Product>
     <PackageId>$(AssemblyName)</PackageId>
     <AssemblyName>Peregrinus</AssemblyName>
-    <Version>0.15.0</Version>
+    <Version>0.15.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="171.30.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.52.0" />
     <PackageReference Include="Semver" Version="2.3.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="21.0.2" />
+    <PackageReference Include="System.IO.Abstractions" Version="21.2.1" />
   </ItemGroup>
 
   <ItemGroup>
